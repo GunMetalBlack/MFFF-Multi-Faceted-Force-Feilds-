@@ -4,6 +4,8 @@ import com.gunmetalblack.mfff.common.reg.BlockRegister;
 import com.gunmetalblack.mfff.common.reg.ItemRegister;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -29,7 +31,12 @@ import java.util.stream.Collectors;
 public class MFFF
 {
     public static final String MODID = "mfff";
-    // Directly reference a log4j logger.
+    public static final ItemGroup MFFF_ITEM_GROUP = new ItemGroup(MODID) {
+        @Override
+        public ItemStack makeIcon() {
+            return ItemRegister.FORCE_PROJECTOR.get().getDefaultInstance();
+        }
+    };
     private static final Logger LOGGER = LogManager.getLogger();
 
     public MFFF() {

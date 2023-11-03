@@ -10,5 +10,5 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class BlockRegister {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MFFF.MODID);
-    public static final RegistryObject<Block> FORCE_PROJECTOR = BLOCKS.register("force_projector", () -> new Block(AbstractBlock.Properties.of(Material.STONE)));
+    public static final RegistryObject<Block> FORCE_PROJECTOR = BLOCKS.register("force_projector", () -> new Block(AbstractBlock.Properties.of(Material.STONE).noOcclusion()));
 }

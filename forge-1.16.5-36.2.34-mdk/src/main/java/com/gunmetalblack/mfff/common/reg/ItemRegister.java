@@ -11,5 +11,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemRegister {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MFFF.MODID);
-    public static final RegistryObject<Item> FORCE_PROJECTOR = ITEMS.register("force_projector", () -> new BlockItem(BlockRegister.FORCE_PROJECTOR.get(), new Item.Properties()));
+    public static final RegistryObject<Item> FORCE_PROJECTOR = ITEMS.register("force_projector", () ->
+            new BlockItem(BlockRegister.FORCE_PROJECTOR.get(), new Item.Properties().tab(MFFF.MFFF_ITEM_GROUP)));
+    public static final RegistryObject<Item> FORCE_CORE = ITEMS.register("force_core",
+            () -> new Item(new Item.Properties().tab(MFFF.MFFF_ITEM_GROUP)));
+    public static final RegistryObject<Item> HARDENED_REDSTONE = ITEMS.register("hardened_redstone",
+            () -> new Item(new Item.Properties().tab(MFFF.MFFF_ITEM_GROUP)));
 }
