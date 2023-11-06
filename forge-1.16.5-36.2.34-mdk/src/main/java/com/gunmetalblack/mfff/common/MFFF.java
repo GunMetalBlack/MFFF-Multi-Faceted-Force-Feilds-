@@ -1,24 +1,17 @@
 package com.gunmetalblack.mfff.common;
 
+import com.gunmetalblack.mfff.common.listener.ClientProxy;
+import com.gunmetalblack.mfff.common.listener.CommonProxy;
 import com.gunmetalblack.mfff.common.reg.BlockRegister;
 import com.gunmetalblack.mfff.common.reg.ItemRegister;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import org.apache.logging.log4j.LogManager;
@@ -30,6 +23,10 @@ import java.util.stream.Collectors;
 @Mod("mfff")
 public class MFFF
 {
+    public static final CommonProxy distProxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
+    @CapabilityInject(IEnergyStorage.class)
+    public static Capability<IEnergyStorage> FORGE_ENERGY_CAPABILITY;
+
     public static final String MODID = "mfff";
     public static final ItemGroup MFFF_ITEM_GROUP = new ItemGroup(MODID) {
         @Override
