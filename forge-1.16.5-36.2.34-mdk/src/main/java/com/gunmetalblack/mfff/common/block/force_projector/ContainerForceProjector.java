@@ -12,5 +12,7 @@ public class ContainerForceProjector extends AbstractContainerMachine {
 
     public ContainerForceProjector(@Nullable ContainerType<?> containerType, int windowId, World level, BlockPos blockPos, PlayerInventory playerInventory) {
         super(containerType, windowId, level, blockPos, playerInventory);
+        addSlot(84,47);
+        addPlayerInventorySlots(8,84);
     }
 }

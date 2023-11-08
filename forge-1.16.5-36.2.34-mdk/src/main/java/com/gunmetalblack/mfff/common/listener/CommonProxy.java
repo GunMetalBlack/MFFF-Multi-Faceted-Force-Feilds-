@@ -2,10 +2,12 @@ package com.gunmetalblack.mfff.common.listener;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 public class CommonProxy {
     public void updateScreenMachine() { }
+    public void onClientSetupEvent(final FMLClientSetupEvent event) {}
     public double getTileEntityUpdateDistance() {
         MinecraftServer minecraftServer = ServerLifecycleHooks.getCurrentServer();
         if(!(minecraftServer instanceof DedicatedServer)) return 64D; // Can't think of any circumstance where this would apply, but worth a check.

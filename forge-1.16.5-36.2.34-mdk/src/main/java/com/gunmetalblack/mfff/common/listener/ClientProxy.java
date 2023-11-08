@@ -1,7 +1,11 @@
 package com.gunmetalblack.mfff.common.listener;
 
+import com.gunmetalblack.mfff.common.block.force_projector.ScreenForceProjector;
 import com.gunmetalblack.mfff.common.block.machine.IScreenMachine;
+import com.gunmetalblack.mfff.common.reg.ContainerRegister;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class ClientProxy extends CommonProxy {
     @Override
@@ -11,7 +15,12 @@ public class ClientProxy extends CommonProxy {
         }
 
     }
-    @Override
+    @SuppressWarnings("unchecked")
+    public void onClientSetupEvent(FMLClientSetupEvent event) {
+        // Register Container Screens
+        ScreenManager.register(ContainerRegister.FORCE_PROJECTOR.get(), ScreenForceProjector::new);
+    }
+        @Override
     public double getTileEntityUpdateDistance() {
         double l1Distance = (Minecraft.getInstance().options.renderDistance + 1) * 16;
         return Math.sqrt(l1Distance * l1Distance + l1Distance * l1Distance);

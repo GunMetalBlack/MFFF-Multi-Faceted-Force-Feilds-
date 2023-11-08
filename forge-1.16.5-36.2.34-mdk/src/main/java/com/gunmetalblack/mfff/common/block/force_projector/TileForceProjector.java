@@ -8,6 +8,8 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import java.sql.SQLOutput;
+
 public class TileForceProjector extends TileMachine implements ITickableTileEntity {
 
     public static final ITextComponent DEFAULT_NAME = new TranslationTextComponent("gui.mfff.force_projector");
