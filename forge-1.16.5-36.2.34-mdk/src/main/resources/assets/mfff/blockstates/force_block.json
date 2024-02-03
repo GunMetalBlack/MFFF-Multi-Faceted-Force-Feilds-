@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "mfff:block/force_block"
+    }
+  }
+}

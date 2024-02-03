@@ -2,9 +2,14 @@ package com.gunmetalblack.mfff.common.block.force_projector;
 
 
 import com.gunmetalblack.mfff.common.block.machine.TileMachine;
+import com.gunmetalblack.mfff.common.capability.MFFFCapabilites;
+import com.gunmetalblack.mfff.common.reg.BlockRegister;
 import com.gunmetalblack.mfff.common.reg.ContainerRegister;
+import net.minecraft.block.Blocks;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -20,11 +25,11 @@ public class TileForceProjector extends TileMachine implements ITickableTileEnti
 
     @Override
     public void tick() {
-        if(level == null) return;
-        if(level.isClientSide()) {
-        } else {
-            if(redstoneSignalPresent()) {
-               //Do stuff
+        if (level == null) return;
+        if (!level.isClientSide())
+        {
+            if (redstoneSignalPresent()) {
+                level.getCapability(MFFFCapabilites.FORCE_PROJECTOR_CAPABILITY).ifPresent(cap -> cap.getFromPosition(getBlockPos()).ifPresent(projector -> projector.forceFieldBuild(level)));
             }
         }
     }
