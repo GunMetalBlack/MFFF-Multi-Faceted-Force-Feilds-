@@ -22,7 +22,7 @@ public class LogicalForceProjector {
     public int xOffset = 0;
     public int yOffset = 0;
     public int zOffset = 0;
-    public boolean isProjecting = false;
+    public boolean isProjecting = true;
     public int perBlockUpkeep = 1000;
     public int initialEnergyCost = (int) Math.pow((2 * radius)+1,2)* 6 * 1000 * 3;
     public int upkeepPerTick = 6 * (int)Math.pow((2 * radius + 1),2);
@@ -50,24 +50,33 @@ public class LogicalForceProjector {
         return data;
     }
 
-    public Optional<MFFFEnergyStorage> getEnergyStorage(ServerWorld world)
+    public Optional<MFFFEnergyStorage> getEnergyStorage(ServerWorld world, BlockPos pos)
     {
         return world.getBlockEntity(pos).getCapability(CapabilityEnergy.ENERGY).resolve().filter(MFFFEnergyStorage.class::isInstance).map(MFFFEnergyStorage.class::cast);
     }
 
+    public void tickIntakeEnergy(ServerWorld world)
+    {
+        int remainingEmptyEnergyStorage = getEnergyStorage(world,pos).map(EnergyStorage::getMaxEnergyStored).orElse(0) - getEnergyStorage(world,pos).map(EnergyStorage::getEnergyStored).orElse(0);
+        int otherBlocksPotentialOutput = getEnergyStorage(world,pos.below()).map(energySorce -> energySorce.extractEnergy(remainingEmptyEnergyStorage,false)).orElse(0);
+        getEnergyStorage(world,pos).map(addedEnergy -> addedEnergy.receiveEnergy(otherBlocksPotentialOutput,false)).orElse(0);
+    }
 
     public void tick(ServerWorld world)
     {
-        int currentEnergy = getEnergyStorage(world).map(EnergyStorage::getEnergyStored).orElse(0);
+        tickIntakeEnergy(world);
+        int currentEnergy = getEnergyStorage(world,pos).map(EnergyStorage::getEnergyStored).orElse(0);
+
         if (world.hasNeighborSignal(pos) && isProjecting && initialEnergyCost >= currentEnergy) {
             forceFieldBuild(world);
             isProjecting = false;
         }
+        if(!(isProjecting && initialEnergyCost >= currentEnergy)){isProjecting = true;}
     }
 
     public boolean tryConsumeUpKeepEnergy(ServerWorld world)
     {
-        return getEnergyStorage(world).map(mfffEnergyStorage -> {
+        return getEnergyStorage(world,pos).map(mfffEnergyStorage -> {
             int amountAvailable = mfffEnergyStorage.extractEnergy(perBlockUpkeep,true);
             if(amountAvailable != perBlockUpkeep) {return false;}
             mfffEnergyStorage.extractEnergy(perBlockUpkeep,false);
