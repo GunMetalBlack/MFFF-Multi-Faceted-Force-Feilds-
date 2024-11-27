@@ -14,6 +14,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -46,6 +47,7 @@ public class MFFF
     public MFFF() {
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.addGenericListener(World.class,this::onAttachCapabilitiesEventWorld);
+        MinecraftForge.EVENT_BUS.addListener(this::onTickEvent);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetupEvent);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetupEvent);
 
@@ -65,6 +67,12 @@ public class MFFF
     @SubscribeEvent
     public void onAttachCapabilitiesEventWorld(final AttachCapabilitiesEvent<World> event) {
         MFFF.distProxy.onAttachCapabilitiesEventWorld(event);
+    }
+
+    @SubscribeEvent
+    public void onTickEvent(final TickEvent.WorldTickEvent event)
+    {
+        MFFF.distProxy.onTickEvent(event);
     }
 
     public static enum MFFFTextColors {

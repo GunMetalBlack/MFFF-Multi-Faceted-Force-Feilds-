@@ -4,7 +4,9 @@ package com.gunmetalblack.mfff.common.capability.forceprojector;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.event.TickEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,16 @@ public class ForceProjectorControllerCapability implements IForceProjectorContro
     {
         CapabilityManager.INSTANCE.register(IForceProjectorControllerCapability.class, new ForceProjectorControllerCapabilityStorage(), ForceProjectorControllerCapability::new);
     }
+
+    @Override
+    public void onTickEvent(final TickEvent.WorldTickEvent event)
+    {
+        for(LogicalForceProjector projector : projectors)
+        {
+            projector.tick((ServerWorld) event.world);
+        }
+    }
+
 
     @Override
     public void registerLogicalForceProjector(World level, BlockPos pos, BlockState state) {
@@ -39,11 +51,15 @@ public class ForceProjectorControllerCapability implements IForceProjectorContro
     }
     public boolean isBlockWithinForceField(BlockPos targetBlock)
     {
-       return projectors.stream().map(projector -> projector.testFunc(targetBlock)).reduce(false, (x, y) -> x || y);
+       return getProjecterFromForceBlock(targetBlock).isPresent();
+    }
+    public Optional<LogicalForceProjector> getProjecterFromForceBlock(BlockPos targetBlock)
+    {
+        return projectors.stream().filter(projector -> projector.containsBlockPos(targetBlock)).findFirst();
     }
     @Override
     public void projectorRemove(BlockPos pos) {
-        projectors.stream().filter(projector -> projector.pos.equals(pos)).forEach(projector -> projectors.remove(projector));
+        new ArrayList<>(projectors).stream().filter(projector -> projector.pos.equals(pos)).forEach(projector -> projectors.remove(projector));
     }
 
 }
