@@ -53,9 +53,12 @@ public class BlockForce extends Block {
     }
     @Override
     public void onRemove(BlockState originalState, World level, BlockPos blockPos, BlockState newState, boolean flag) {
-        if (!originalState.is(newState.getBlock())) {
+        if (!originalState.is(newState.getBlock()) && level instanceof ServerWorld) {
             super.onRemove(originalState, level, blockPos, newState, flag);
-            level.getCapability(MFFFCapabilites.FORCE_PROJECTOR_CAPABILITY).ifPresent(cap -> System.out.println(cap.isBlockWithinForceField(blockPos)));
+            boolean shouldReplace = level.getCapability(MFFFCapabilites.FORCE_PROJECTOR_CAPABILITY).resolve().flatMap(cap -> cap.getProjecterFromForceBlock(blockPos)).map(logicalForceProjector -> logicalForceProjector.tryConsumeBrokenUpKeepEnergy((ServerWorld) level)).orElse(false);
+            if(shouldReplace) {
+                level.setBlock(blockPos, originalState, 3);
+            }
         }
     }
     @Override
