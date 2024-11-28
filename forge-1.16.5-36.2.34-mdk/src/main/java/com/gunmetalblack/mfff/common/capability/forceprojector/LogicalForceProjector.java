@@ -52,7 +52,10 @@ public class LogicalForceProjector {
 
     public Optional<MFFFEnergyStorage> getEnergyStorage(ServerWorld world, BlockPos pos)
     {
-        return world.getBlockEntity(pos).getCapability(CapabilityEnergy.ENERGY).resolve().filter(MFFFEnergyStorage.class::isInstance).map(MFFFEnergyStorage.class::cast);
+        return Optional.ofNullable(world.getBlockEntity(pos))
+                .flatMap(blockEntity -> blockEntity.getCapability(CapabilityEnergy.ENERGY).resolve())
+                .filter(MFFFEnergyStorage.class::isInstance)
+                .map(MFFFEnergyStorage.class::cast);
     }
 
     public void tickIntakeEnergy(ServerWorld world)
@@ -64,14 +67,23 @@ public class LogicalForceProjector {
 
     public void tick(ServerWorld world)
     {
-        tickIntakeEnergy(world);
-        int currentEnergy = getEnergyStorage(world,pos).map(EnergyStorage::getEnergyStored).orElse(0);
 
-        if (world.hasNeighborSignal(pos) && isProjecting && initialEnergyCost >= currentEnergy) {
+        // Pull in energy from the outside into our internal buffer. We need to do this BEFORE we do our tick logic.
+        tickIntakeEnergy(world);
+
+        // Determine status
+        boolean isRedstonePowered = world.hasNeighborSignal(pos);
+        boolean isForgeEnergyPowered = getEnergyStorage(world,pos).map(es -> es.getEnergyStored() > initialEnergyCost).orElse(false);
+        boolean shouldBeProjecting = isRedstonePowered && isForgeEnergyPowered;
+
+        // Build the forcefield if it should exist but doesn't
+        if(shouldBeProjecting && !isProjecting) {
             forceFieldBuild(world);
-            isProjecting = false;
+            isProjecting = true;
         }
-        if(!(isProjecting && initialEnergyCost >= currentEnergy)){isProjecting = true;}
+
+        // Update state for next tick
+        this.isProjecting = shouldBeProjecting;
     }
 
     public boolean tryConsumeUpKeepEnergy(ServerWorld world)
