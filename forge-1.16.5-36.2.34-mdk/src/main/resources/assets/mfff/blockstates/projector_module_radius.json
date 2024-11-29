@@ -1,7 +1,20 @@
 {
   "variants": {
-    "": {
-      "model": "mfff:block/projector_module_radius"
+    "facing=north": {
+      "model": "mfff:block/projector_module_radius",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "mfff:block/projector_module_radius",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "mfff:block/projector_module_radius",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "mfff:block/projector_module_radius",
+      "y": 270
     }
   }
 }
