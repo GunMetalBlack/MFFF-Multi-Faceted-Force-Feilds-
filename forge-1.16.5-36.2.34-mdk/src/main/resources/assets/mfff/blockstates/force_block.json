@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
+    "has_been_hit=false": {
       "model": "mfff:block/force_block"
+    },
+    "has_been_hit=true": {
+      "model": "mfff:block/force_block_hit"
     }
   }
 }

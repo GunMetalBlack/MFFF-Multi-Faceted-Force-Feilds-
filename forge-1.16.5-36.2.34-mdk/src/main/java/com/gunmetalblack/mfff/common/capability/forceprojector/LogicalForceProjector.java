@@ -1,9 +1,12 @@
 package com.gunmetalblack.mfff.common.capability.forceprojector;
 
 import com.gunmetalblack.mfff.common.MFFF;
+import com.gunmetalblack.mfff.common.block.projector_modules.ProjectorModuleParent;
 import com.gunmetalblack.mfff.common.capability.MFFFCapabilites;
 import com.gunmetalblack.mfff.common.capability.energystorage.MFFFEnergyStorage;
 import com.gunmetalblack.mfff.common.reg.BlockRegister;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -18,7 +21,7 @@ import java.util.Optional;
 
 public class LogicalForceProjector {
     public BlockPos pos;
-    public int radius = 27;
+    public int radius = 3;
     public int xOffset = 0;
     public int yOffset = 0;
     public int zOffset = 0;
@@ -28,7 +31,6 @@ public class LogicalForceProjector {
     public int initialEnergyCost = (int) Math.pow((2 * radius) + 1, 2) * 6 * 1000 * 3;
     public int upkeepPerTick = 6 * (int) Math.pow((2 * radius + 1), 2);
 
-    public int offset;
 
     public LogicalForceProjector(CompoundNBT nbt) {
         int x = nbt.getInt("x");
@@ -157,6 +159,29 @@ public class LogicalForceProjector {
         }
     }
 
+    public BlockState getBlockStateRelative(World worldIn, BlockPos pos, BlockState state, int var)
+    {
+        return worldIn.getBlockState(pos.relative(state.getValue(ProjectorModuleParent.FACING), var));
+    }
+
+
+    public void searchForModules(World worldIn)
+    {
+        setRadius(3);
+        setOffset(0);
+        for (Direction direction : new Direction[]{Direction.NORTH,Direction.SOUTH,Direction.EAST,Direction.WEST}) {
+            for(int i = 1; i < 8; ++i) {
+                Block iterBlock =  worldIn.getBlockState(pos.relative(direction, i)).getBlock();
+                if(iterBlock instanceof ProjectorModuleParent) {
+                    ((ProjectorModuleParent)iterBlock).applyModuleEffects(this);
+                }
+            }
+        }
+        this.isProjecting = false;
+    }
+
+
+
     public BlockPos rotateOffsetAboutDirection(int i, int j, Direction direction, int magnitude) {
         if (direction.getAxis() == Direction.Axis.X)
             return new BlockPos(magnitude * direction.getAxisDirection().getStep(), i, j);
@@ -198,6 +223,8 @@ public class LogicalForceProjector {
     }
 
     public void setOffset(int offset) {
-        this.offset = offset;
+        this.zOffset = offset;
+        this.yOffset = offset;
+        this.xOffset = offset;
     }
 }

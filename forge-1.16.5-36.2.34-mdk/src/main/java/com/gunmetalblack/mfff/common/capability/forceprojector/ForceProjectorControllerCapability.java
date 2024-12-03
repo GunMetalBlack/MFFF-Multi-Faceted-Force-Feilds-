@@ -34,7 +34,9 @@ public class ForceProjectorControllerCapability implements IForceProjectorContro
 
     @Override
     public void registerLogicalForceProjector(World level, BlockPos pos, BlockState state) {
-        projectors.add(new LogicalForceProjector(pos));
+        LogicalForceProjector projector = new LogicalForceProjector(pos);
+        projector.searchForModules(level);
+        projectors.add(projector);
     }
 
     @Override

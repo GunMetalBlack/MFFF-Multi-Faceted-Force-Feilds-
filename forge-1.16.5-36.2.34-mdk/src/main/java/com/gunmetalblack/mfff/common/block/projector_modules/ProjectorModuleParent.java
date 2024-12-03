@@ -1,9 +1,14 @@
 package com.gunmetalblack.mfff.common.block.projector_modules;
 
 
+import com.gunmetalblack.mfff.common.block.force_projector.BlockForceProjector;
+import com.gunmetalblack.mfff.common.capability.MFFFCapabilites;
+import com.gunmetalblack.mfff.common.capability.forceprojector.LogicalForceProjector;
+import com.gunmetalblack.mfff.common.reg.BlockRegister;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.block.material.PushReaction;
@@ -64,6 +69,61 @@ public class ProjectorModuleParent extends Block {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
+    /*
+     * Make parent module:
+     *  if a projector is found save the direction its facing
+     *  Only if the direction its placed is in the correct direction and is in contact with the module also check if the block infront and behind have the parent instance if not pass
+     *   The parent saves a instance of itself which for every child placed will be passed on
+     *   Each Module will add a +1 to the multiplier
+     * */
+
+    public BlockState getBlockStateRelative(World worldIn, BlockPos pos, BlockState state, int var)
+    {
+        return worldIn.getBlockState(pos.relative(state.getValue(ProjectorModuleParent.FACING), var));
+    }
+
+    public BlockPos getBlockPosRelative(BlockPos pos, BlockState state, int var)
+    {
+        return pos.relative(state.getValue(ProjectorModuleParent.FACING), var);
+    }
+
+    public void setProjectorValue(int radiusMultiplyer)
+    {
+        System.out.println("RADIUS:" + radiusMultiplyer);
+    }
+
+    public void onModulePropagate(World worldIn, BlockPos pos, BlockState state)
+    {
+        for (int index : new int[]{1, -1}) {
+            for(int i = 0; i < 8; ++i) {
+                Block iterBlock = getBlockStateRelative(worldIn, pos, state, index * i).getBlock();
+                if(iterBlock instanceof BlockForceProjector) {
+                    BlockPos posOfProjector = getBlockPosRelative(pos, state, index * i); // todo helper function for this
+                    worldIn.getCapability(MFFFCapabilites.FORCE_PROJECTOR_CAPABILITY).resolve().flatMap(cap ->
+                            cap.getFromPosition(posOfProjector)).ifPresent(proj ->
+                            proj.searchForModules(worldIn));
+                }
+            }
+        }
+    }
+
+    public void applyModuleEffects(LogicalForceProjector projector)
+    {
+
+    }
+
+
+
+    @Override
+    public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemInHandOfPlacer) {
+        if(!worldIn.isClientSide) {
+            onModulePropagate(worldIn, pos, state);
+        }
+        super.setPlacedBy(worldIn, pos, state, placer, itemInHandOfPlacer);
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
+    }
+
+
     @Override
     @Nullable
     public BlockState getStateForPlacement(BlockItemUseContext context) {
@@ -101,9 +161,4 @@ public class ProjectorModuleParent extends Block {
         return super.updateShape(blockState, facing, facingState, level, currentPos, facingPos);
     }
 
-    @Override
-    public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemInHandOfPlacer) {
-        super.setPlacedBy(worldIn, pos, state, placer, itemInHandOfPlacer);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
-    }
 }
