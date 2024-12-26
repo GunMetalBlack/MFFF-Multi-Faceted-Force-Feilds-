@@ -8,6 +8,8 @@ import com.gunmetalblack.mfff.common.reg.BlockRegister;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.LeavesBlock;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -143,17 +145,22 @@ public class LogicalForceProjector {
         for (Direction direction : Direction.values()) {
             for (int i = -radius; i <= radius; ++i) {
                 for (int j = -radius; j <= radius; ++j) {
-                    level.setBlock(pos.offset(xOffset, yOffset, zOffset).offset(rotateOffsetAboutDirection(i, j, direction, radius)), BlockRegister.FORCE_BLOCK.get().defaultBlockState(), 2);
+                    BlockPos blockPos = pos.offset(xOffset, yOffset, zOffset).offset(rotateOffsetAboutDirection(i, j, direction, radius));
+                    if(level.getBlockState(blockPos).canBeReplaced(Fluids.FLOWING_WATER) || level.getBlockState(blockPos).getBlock() instanceof LeavesBlock) {
+                        level.setBlock(pos.offset(xOffset, yOffset, zOffset).offset(rotateOffsetAboutDirection(i, j, direction, radius)), BlockRegister.FORCE_BLOCK.get().defaultBlockState(), 2);
+                    }
                 }
             }
         }
     }
-
+    
     public void forceFieldDestroy(World level) {
         for (Direction direction : Direction.values()) {
             for (int i = -radius; i <= radius; ++i) {
                 for (int j = -radius; j <= radius; ++j) {
-                    level.setBlock(pos.offset(xOffset, yOffset, zOffset).offset(rotateOffsetAboutDirection(i, j, direction, radius)), Blocks.AIR.defaultBlockState(), 2);
+                    if(level.getBlockState(pos).canBeReplaced(Fluids.WATER) || level.getBlockState(pos).getBlock() instanceof LeavesBlock) {
+                        level.setBlock(pos.offset(xOffset, yOffset, zOffset).offset(rotateOffsetAboutDirection(i, j, direction, radius)), Blocks.AIR.defaultBlockState(), 2);
+                    }
                 }
             }
         }
