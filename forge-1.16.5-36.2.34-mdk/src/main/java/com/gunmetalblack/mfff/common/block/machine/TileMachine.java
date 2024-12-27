@@ -1,15 +1,10 @@
 package com.gunmetalblack.mfff.common.block.machine;
 
 import com.gunmetalblack.mfff.common.MFFF;
-import com.gunmetalblack.mfff.common.block.force_projector.ContainerForceProjector;
 import com.gunmetalblack.mfff.common.capability.energystorage.MFFFEnergyStorage;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -33,7 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-public class TileMachine extends TileEntity implements INamedContainerProvider, INameable {
+public class TileMachine extends TileEntity implements INameable {
 
     private ITextComponent name;
     private final ITextComponent defaultName;
@@ -174,11 +169,7 @@ public class TileMachine extends TileEntity implements INamedContainerProvider, 
         return this.worldPosition;
     }
 
-    @Override
-    public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-        // TODO: This shouldn't always be instance of launcher platform - need to be generic
-        return new ContainerForceProjector(getContainerType(), i, this.getLevel(), getPosOfTileEntity(), playerInventory);
-    }
+
 
     public boolean redstoneSignalPresent() {
         assert level != null;

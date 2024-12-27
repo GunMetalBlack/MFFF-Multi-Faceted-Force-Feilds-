@@ -1,13 +1,13 @@
 package com.gunmetalblack.mfff.common.listener;
 
-import com.gunmetalblack.mfff.common.block.force_projector.ScreenForceProjector;
 import com.gunmetalblack.mfff.common.block.machine.IScreenMachine;
 import com.gunmetalblack.mfff.common.reg.BlockRegister;
-import com.gunmetalblack.mfff.common.reg.ContainerRegister;
+import com.gunmetalblack.mfff.common.reg.EntityReg;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.entity.ArmorStandRenderer;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class ClientProxy extends CommonProxy {
@@ -21,7 +21,7 @@ public class ClientProxy extends CommonProxy {
     @SuppressWarnings("unchecked")
     public void onClientSetupEvent(FMLClientSetupEvent event) {
         // Register Container Screens
-        ScreenManager.register(ContainerRegister.FORCE_PROJECTOR.get(), ScreenForceProjector::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityReg.DISPLAY_TEXT.get(), manager -> new ArmorStandRenderer(manager));
         RenderTypeLookup.setRenderLayer(BlockRegister.FORCE_BLOCK.get(), RenderType.translucent());
     }
         @Override

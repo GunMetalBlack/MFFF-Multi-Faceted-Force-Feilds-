@@ -1,8 +1,6 @@
 package com.gunmetalblack.mfff.common.capability.forceprojector;
 
-import com.gunmetalblack.mfff.common.MFFF;
 import com.gunmetalblack.mfff.common.block.projector_modules.ProjectorModuleParent;
-import com.gunmetalblack.mfff.common.capability.MFFFCapabilites;
 import com.gunmetalblack.mfff.common.capability.energystorage.MFFFEnergyStorage;
 import com.gunmetalblack.mfff.common.reg.BlockRegister;
 import net.minecraft.block.Block;
@@ -15,7 +13,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 

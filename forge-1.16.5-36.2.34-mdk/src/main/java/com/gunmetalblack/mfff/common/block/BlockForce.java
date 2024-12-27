@@ -1,8 +1,6 @@
 package com.gunmetalblack.mfff.common.block;
 
 import com.gunmetalblack.mfff.common.capability.MFFFCapabilites;
-import com.gunmetalblack.mfff.common.capability.forceprojector.IForceProjectorControllerCapability;
-import com.gunmetalblack.mfff.common.capability.forceprojector.LogicalForceProjector;
 import com.gunmetalblack.mfff.common.reg.BlockRegister;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -10,11 +8,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -24,10 +19,8 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 public class BlockForce extends Block {

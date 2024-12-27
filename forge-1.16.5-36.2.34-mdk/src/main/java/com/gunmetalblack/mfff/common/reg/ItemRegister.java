@@ -1,7 +1,6 @@
 package com.gunmetalblack.mfff.common.reg;
 
 import com.gunmetalblack.mfff.common.MFFF;
-import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.RegistryObject;

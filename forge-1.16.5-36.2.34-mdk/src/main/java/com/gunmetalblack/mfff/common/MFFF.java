@@ -3,7 +3,7 @@ package com.gunmetalblack.mfff.common;
 import com.gunmetalblack.mfff.common.listener.ClientProxy;
 import com.gunmetalblack.mfff.common.listener.CommonProxy;
 import com.gunmetalblack.mfff.common.reg.BlockRegister;
-import com.gunmetalblack.mfff.common.reg.ContainerRegister;
+import com.gunmetalblack.mfff.common.reg.EntityReg;
 import com.gunmetalblack.mfff.common.reg.ItemRegister;
 import com.gunmetalblack.mfff.common.reg.TileRegister;
 import net.minecraft.item.ItemGroup;
@@ -15,6 +15,7 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -24,8 +25,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("mfff")
@@ -50,12 +49,17 @@ public class MFFF
         MinecraftForge.EVENT_BUS.addListener(this::onTickEvent);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetupEvent);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetupEvent);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onEntityAttributeCreationEvent);
 
         for(DeferredRegister<?> deferredRegister : getMFFFDeferredRegisters()){
             deferredRegister.register(FMLJavaModLoadingContext.get().getModEventBus());
         }
     }
-
+    @SubscribeEvent
+    public void onEntityAttributeCreationEvent(EntityAttributeCreationEvent event)
+    {
+        MFFF.distProxy.onEntityAttributeCreationEvent(event);
+    }
     @SubscribeEvent
     public void onClientSetupEvent(final FMLClientSetupEvent event) {
         MFFF.distProxy.onClientSetupEvent(event);
@@ -86,9 +90,9 @@ public class MFFF
     public DeferredRegister<?>[] getMFFFDeferredRegisters() {
         return new DeferredRegister[] {
                 BlockRegister.BLOCKS,
-                ContainerRegister.CONTAINERS,
                 ItemRegister.ITEMS,
-                TileRegister.TILES
+                TileRegister.TILES,
+                EntityReg.ENTITIES
         };
     }
 }

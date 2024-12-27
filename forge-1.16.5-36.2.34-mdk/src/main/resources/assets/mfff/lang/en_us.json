@@ -4,5 +4,7 @@
 
   "block.mfff.force_projector": "Mystic Feild Projector From Hell",
   "block.mfff.force_block": "Force Block",
-  "itemGroup.mfff": "Multi Faceted Force Feilds"
+  "itemGroup.mfff": "Multi Faceted Force Feilds",
+  "energy.mfff.forge": "Forge Energy",
+  "energy.mfff.forge.short": "FE"
 }

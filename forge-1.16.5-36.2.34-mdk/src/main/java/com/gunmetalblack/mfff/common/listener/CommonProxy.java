@@ -1,15 +1,17 @@
 package com.gunmetalblack.mfff.common.listener;
 
 import com.gunmetalblack.mfff.common.MFFF;
-import com.gunmetalblack.mfff.common.capability.forceprojector.ForceProjectorControllerCapability;
-import com.gunmetalblack.mfff.common.capability.forceprojector.ForceProjectorControllerCapabilityProvider;
 import com.gunmetalblack.mfff.common.capability.MFFFCapabilites;
+import com.gunmetalblack.mfff.common.capability.forceprojector.ForceProjectorControllerCapabilityProvider;
+import com.gunmetalblack.mfff.common.reg.EntityReg;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
@@ -37,5 +39,9 @@ public class CommonProxy {
         {
             event.world.getCapability(MFFFCapabilites.FORCE_PROJECTOR_CAPABILITY).ifPresent(cap -> cap.onTickEvent(event));
         }
+    }
+
+    public void onEntityAttributeCreationEvent(EntityAttributeCreationEvent event) {
+        event.put(EntityReg.DISPLAY_TEXT.get(), LivingEntity.createLivingAttributes().build());
     }
 }
