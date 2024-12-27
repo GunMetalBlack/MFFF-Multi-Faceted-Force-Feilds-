@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "#O#",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:purple_dye"
+    },
+    "O": {
+      "tag": "forge:logs"
+    }
+  },
+  "result": {"item": "mfff:purple_log",  "count": 1}
+}

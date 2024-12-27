@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "minecraft:enchanting_table"
+  },
+  "result": "mfff:force_core",
+  "experience": 12,
+  "cookingtime": 600
+}

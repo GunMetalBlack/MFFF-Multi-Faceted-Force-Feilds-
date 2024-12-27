@@ -16,6 +16,8 @@ public class ItemRegister {
             new BlockItem(BlockRegister.PROJECTOR_MODULE_RADIUS.get(), new Item.Properties().tab(MFFF.MFFF_ITEM_GROUP)));
     public static final RegistryObject<Item> FORCE_CORE = ITEMS.register("force_core",
             () -> new Item(new Item.Properties().tab(MFFF.MFFF_ITEM_GROUP)));
+    public static final RegistryObject<Item> PURPLE_LOG = ITEMS.register("purple_log",() ->
+            new BlockItem(BlockRegister.PURPLE_LOG.get(), new Item.Properties().tab(MFFF.MFFF_ITEM_GROUP)));
     public static final RegistryObject<Item> HARDENED_REDSTONE = ITEMS.register("hardened_redstone",
             () -> new Item(new Item.Properties().tab(MFFF.MFFF_ITEM_GROUP)));
 }

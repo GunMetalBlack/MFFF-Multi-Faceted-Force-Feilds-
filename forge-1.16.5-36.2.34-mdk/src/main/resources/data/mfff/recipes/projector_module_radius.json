@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "   ",
+    "X#X",
+    "OEO"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:iron_block"
+    },
+    "E": {
+      "item": "mfff:hardened_redstone"
+    },
+    "O": {
+      "item": "mfff:purple_log"
+    },
+    "X": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "mfff:projector_module_radius",
+    "count": 1
+  }
+}

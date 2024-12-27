@@ -27,6 +27,8 @@ public class BlockForce extends Block {
 
     public static final BooleanProperty HAS_BEEN_HIT =  BooleanProperty.create("has_been_hit");
 
+    public static final int TICK_RATE = 100;
+
     public BlockForce() {
         super(AbstractBlock.Properties.of(Material.METAL, MaterialColor.COLOR_GRAY)
                 .strength(10)
@@ -70,16 +72,12 @@ public class BlockForce extends Block {
             }
         }
     }
-    @Override
-    public boolean isRandomlyTicking(BlockState pState) {
-        return true;
-    }
 
     /**
      * Performs a random tick on a block.
      */
     @Override
-    public void randomTick(BlockState pState, ServerWorld pLevel, BlockPos pPos, Random pRandom) {
+    public void tick(BlockState pState, ServerWorld pLevel, BlockPos pPos, Random pRand) {
         boolean hadEnoughEnergy = pLevel.getCapability(MFFFCapabilites.FORCE_PROJECTOR_CAPABILITY).resolve()
                 .flatMap(cap -> cap.getProjecterFromForceBlock(pPos))
                 .map(logicalForceProjector -> logicalForceProjector.tryConsumeUpKeepEnergy(pLevel))
@@ -87,6 +85,13 @@ public class BlockForce extends Block {
         if(!hadEnoughEnergy) {pLevel.removeBlock(pPos, false);} else if (hadEnoughEnergy && pLevel.getBlockState(pPos).getValue(HAS_BEEN_HIT)) {
             pLevel.setBlock(pPos, BlockRegister.FORCE_BLOCK.get().defaultBlockState(), 3);
         }
+        pLevel.getBlockTicks().scheduleTick(pPos, this, pRand.nextInt(20) + TICK_RATE);
+    }
+
+    @Override
+    public void onPlace(BlockState blockState, World world, BlockPos blockPos, BlockState originalBlockState, boolean b)
+    {
+        world.getBlockTicks().scheduleTick(blockPos, this, TICK_RATE);
     }
 /**
      * Copied from {@link net.minecraft.block.AbstractGlassBlock}

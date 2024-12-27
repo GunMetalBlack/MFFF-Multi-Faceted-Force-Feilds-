@@ -154,18 +154,19 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:mekanism-tools-268567:3659392")
     runtimeOnly fg.deobf("curse.maven:worldedit-225608:3283693")
     runtimeOnly fg.deobf("curse.maven:intercontinental-ballistic-redux-432853:5935864")
+    runtimeOnly fg.deobf("curse.maven:jei-238222:3681294")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
     manifest {
         attributes([
-            "Specification-Title": "examplemod",
-            "Specification-Vendor": "examplemodsareus",
+            "Specification-Title": "Multi Faceted Force Fields",
+            "Specification-Vendor": "piss",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"examplemodsareus",
+            "Implementation-Vendor" :"Me",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }

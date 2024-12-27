@@ -2,9 +2,11 @@
   "item.mfff.force_core": "Force Core",
   "item.mfff.hardened_redstone": "Hardened Redstone",
 
-  "block.mfff.force_projector": "Mystic Feild Projector From Hell",
+  "block.mfff.force_projector": "Mystic Field Projector",
+  "block.mfff.purple_log": "Mystical Log",
   "block.mfff.force_block": "Force Block",
-  "itemGroup.mfff": "Multi Faceted Force Feilds",
+  "block.mfff.projector_module_radius": "Projector Radius Expander",
+  "itemGroup.mfff": "Multi Faceted Force Fields",
   "energy.mfff.forge": "Forge Energy",
   "energy.mfff.forge.short": "FE"
 }

@@ -121,6 +121,13 @@ public class ProjectorModuleParent extends Block {
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
     }
 
+    @Override
+    public void onRemove(BlockState originalState, World level, BlockPos blockPos, BlockState newState, boolean flag) {
+        if(!level.isClientSide) {
+            onModulePropagate(level, blockPos, originalState);
+        }
+        super.onRemove(originalState,level,blockPos,newState,flag);
+    }
 
     @Override
     @Nullable

@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "   ",
+    "X#X",
+    "OEO"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:redstone_torch"
+    },
+    "X": {
+      "item": "mfff:hardened_redstone"
+    },
+    "O": {
+      "item": "mfff:purple_log"
+    },
+    "E": {
+      "item": "mfff:force_core"
+    }
+  },
+  "result": {
+    "item": "mfff:force_projector",
+    "count": 1
+  }
+}
