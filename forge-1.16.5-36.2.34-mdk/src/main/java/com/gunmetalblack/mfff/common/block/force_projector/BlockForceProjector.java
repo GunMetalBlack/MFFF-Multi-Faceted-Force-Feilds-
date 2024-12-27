@@ -3,6 +3,7 @@ package com.gunmetalblack.mfff.common.block.force_projector;
 import com.gunmetalblack.mfff.common.block.machine.AbstractBlockMachineTile;
 import com.gunmetalblack.mfff.common.capability.MFFFCapabilites;
 import com.gunmetalblack.mfff.common.capability.energystorage.MFFFEnergyStorage;
+import com.gunmetalblack.mfff.common.entity.DisplayTextEntity;
 import com.gunmetalblack.mfff.common.reg.EntityReg;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.block.AbstractBlock;
@@ -53,6 +54,25 @@ public class BlockForceProjector extends AbstractBlockMachineTile {
         super(properties, tileEntityType, false);
     }
 
+    public DisplayTextEntity createDisplayTextEntity(float yCord, World world, String message, BlockPos blockPos, String color)
+    {
+        DisplayTextEntity entity = EntityReg.DISPLAY_TEXT.get().create(world);
+        EntityDataAccessor entityDataAccessor = new EntityDataAccessor(entity);
+        CompoundNBT entityNBT = entityDataAccessor.getData();
+        entityNBT.putString("CustomName", "{\"text\":\""+message+"\",\"color\":\""+color+"\",\"bold\":true}");
+        entityNBT.putByte("CustomNameVisible", (byte)1);
+        entityNBT.putByte("NoGravity", (byte)1);
+        entityNBT.putByte("Invisible", (byte)1);
+        try {
+            entityDataAccessor.setData(entityNBT);
+        } catch (CommandSyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        entity.setPos(blockPos.getX() + 0.5, blockPos.getY() + yCord, blockPos.getZ() + 0.5);
+        world.addFreshEntity(entity);
+        return entity;
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     public ActionResultType use(BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockRayTraceResult hit) {
@@ -71,23 +91,12 @@ public class BlockForceProjector extends AbstractBlockMachineTile {
             .flatMap(cap -> cap.getFromPosition(blockPos))
             .flatMap(projector -> projector.getEnergyStorage((ServerWorld) world,blockPos))
             .map(mfffEnergyStorage -> mfffEnergyStorage.getEnergyStored())
-            .map(integer -> MFFFEnergyStorage.EnergyMeasurementUnit.formatEnergyValue(integer,0,true))
+            .map(integer -> MFFFEnergyStorage.EnergyMeasurementUnit.formatEnergyValue(integer,2,true))
             .orElse(new StringTextComponent("piss"));
-        String projInfo = "Radius:" + radius + "\\n" + "CurrentEnergy:" + currentEnergy.getString() + "\\n" + "InitialEnergyCost:" +initEnergyCost.getString();
-        ArmorStandEntity entity = EntityReg.DISPLAY_TEXT.get().create(world);
-        EntityDataAccessor entityDataAccessor = new EntityDataAccessor(entity);
-        CompoundNBT entityNBT = entityDataAccessor.getData();
-        entityNBT.putString("CustomName", "{\"text\":\""+projInfo+"\",\"color\":\"gold\",\"bold\":true}");
-        entityNBT.putByte("CustomNameVisible", (byte)1);
-        entityNBT.putByte("NoGravity", (byte)1);
-        entityNBT.putByte("Invisible", (byte)1);
-        try {
-            entityDataAccessor.setData(entityNBT);
-        } catch (CommandSyntaxException e) {
-            throw new RuntimeException(e);
-        }
-        entity.setPos(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5);
-        world.addFreshEntity(entity);
+        DisplayTextEntity radiusTextEntity = createDisplayTextEntity(0.5f, world,"Radius: " + radius, blockPos, "gold");
+        DisplayTextEntity currentEnergyTextEntity = createDisplayTextEntity(0.25f, world,"Current Energy: " + currentEnergy.getString(), blockPos, "green");
+        DisplayTextEntity initEnergyTextEntity = createDisplayTextEntity(0, world,"Initial Energy Cost: " +initEnergyCost.getString(), blockPos, "red");
+
         return super.use(blockState, world, blockPos, playerEntity, hand, hit);
     }
 
